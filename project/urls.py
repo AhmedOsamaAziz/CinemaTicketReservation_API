@@ -18,8 +18,11 @@ from django.urls import path, include
 from ticket import views
 from rest_framework.routers import DefaultRouter
 
+# Authentications
+from rest_framework.authtoken.views import obtain_auth_token
+
 router = DefaultRouter()
-                # Will be included into the below url
+# Will be included into the below url
 router.register('guests', views.ViewSets_Guest)
 router.register('movies', views.ViewSets_Movie)
 router.register('reservations', views.ViewSets_Reservation)
@@ -27,7 +30,7 @@ router.register('reservations', views.ViewSets_Reservation)
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # using Djang   
+    # using Djang
     path('django/no_rest_no_model/', views.no_rest_no_model),
     path('django/no_rest_with_model/', views.no_rest_with_model),
 
@@ -40,7 +43,7 @@ urlpatterns = [
     # Using Class Based View (CBV)
     path('rest/CBV_List/', views.CBV_List.as_view()),
     path('rest/CBV_PK/<int:pk>', views.CBV_PK.as_view()),
-    
+
     # Using Mixins
     path('rest/Mixins_List/', views.Mixins_List.as_view()),
     path('rest/Mixins_PK/<int:pk>', views.Mixins_PK.as_view()),
@@ -54,7 +57,17 @@ urlpatterns = [
     path('rest/', include(router.urls)),
     path('rest/', include(router.urls)),
 
+
     # Business Functions
     path('rest/find_movie/', views.find_movie),
     path('rest/new_reservation', views.new_reservation),
+
+
+    # Authintication
+    # Gives you an option to lg out from resrt site
+    # Must Named as it is
+    path('api-auth', include('rest_framework.urls')),
+
+    # Token Authentication
+    path('api-token', obtain_auth_token),
 ]

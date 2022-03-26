@@ -41,12 +41,32 @@ INSTALLED_APPS = [
     # RESTFul
     'rest_framework',
 
+    # REST Token
+    'rest_framework.authtoken',
+    
     # My Apps
     'ticket',
 ]
 
+#### Global Permissions (Global Means On All View 'End Points')
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':
+    ['rest_framework.authentication.TokenAuthentication'], # Token Authentication
 
-REST_FRAMEWORK = {}
+    # 'DEFAULT_AUTHENTICATION_CLASSES':
+    # ['rest_framework.authentication.BasicAuthentication'], # Must submit username and password
+
+    # 'DEFAULT_PERMISSION_CLASSES':
+    # ['rest_framework.permissions.IsAuthenticated'] 
+    
+    # (PERMISSION) means >> What he will do on the Views 
+    # 1- AllowAny (Any One can do whatever he want)
+    # 2- Is Authenticated (Any one has user name and password can do whatever he want)
+    # 3- Is Admin User (only admin user can access my endpoints(APIs))
+    # 4- Is Authenticated Readonly (Any one has username and password only can readonly my endpoints)
+
+    # You Can Add Your Own Permission
+}
 
 
 MIDDLEWARE = [

@@ -12,6 +12,10 @@ from rest_framework import status, filters
 from rest_framework.views import APIView
 from rest_framework import generics, mixins, viewsets
 
+# For Authentications
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 from .serializers import GuestSerializer, MovieSerializer, ReservationSerializer
 from .models import Movie, Guest, Reservation
 
@@ -55,7 +59,7 @@ def FBV_LIST(request):
         # many means more than one
         serializer = GuestSerializer(guests, many=True)
         # Response
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':  # Create New Record Into DataBase
         # Deserialize
         serializer = GuestSerializer(data=request.data)
@@ -68,6 +72,8 @@ def FBV_LIST(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # 3.2- GET(PK) PUT DELETE
+
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def FBV_PK(request, pk):
     # DB Query
@@ -205,6 +211,13 @@ class ViewSets_Guest(viewsets.ModelViewSet):
     # Must be named 'serializer_class'
     serializer_class = GuestSerializer
 
+    # Must be named as it is
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
+
+    authentication_classes = [TokenAuthentication]
+
+
 
 class ViewSets_Movie(viewsets.ModelViewSet):
     # Must be named 'queryset'
@@ -250,7 +263,7 @@ def new_reservation(request):
     guest.mobile = request.data['mobile']
     guest.save()
 
-    reservation =Reservation()
+    reservation = Reservation()
     reservation.guest = guest
     reservation.movie = movie
     reservation.save()
